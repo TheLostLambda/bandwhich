@@ -23,13 +23,12 @@ pub fn elapsed_time(last_start_time: Instant, cumulative_time: Duration, paused:
 }
 
 impl<'a> HeaderDetails<'a> {
-    #[allow(clippy::int_plus_one)]
     pub fn render(&self, frame: &mut Frame<impl Backend>, rect: Rect) {
         let bandwidth = self.bandwidth_string();
-        let mut elapsed_time = None;
+        let mut elapsed_time = String::new();
         let print_elapsed_time = if self.state.cumulative_mode {
-            elapsed_time = Some(self.elapsed_time_string());
-            bandwidth.len() + elapsed_time.as_ref().unwrap().len() + 1 <= rect.width as usize
+            elapsed_time = self.elapsed_time_string();
+            bandwidth.len() + elapsed_time.len() < rect.width as usize
         } else {
             false
         };
@@ -41,7 +40,7 @@ impl<'a> HeaderDetails<'a> {
         };
 
         if print_elapsed_time {
-            self.render_elapsed_time(frame, rect, elapsed_time.as_ref().unwrap(), color);
+            self.render_elapsed_time(frame, rect, &elapsed_time, color);
         }
         self.render_bandwidth(frame, rect, &bandwidth, color);
     }

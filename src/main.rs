@@ -25,13 +25,13 @@ use ::tui::backend::Backend;
 use std::process;
 
 use ::std::io;
-use ::std::time::Instant;
+use ::std::time::{Duration, Instant};
 use ::termion::raw::IntoRawMode;
 use ::tui::backend::TermionBackend;
 use std::sync::RwLock;
 use structopt::StructOpt;
 
-const DISPLAY_DELTA: time::Duration = time::Duration::from_millis(1000);
+const DISPLAY_DELTA: Duration = Duration::from_millis(1000);
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "bandwhich")]
@@ -123,7 +123,7 @@ where
     let running = Arc::new(AtomicBool::new(true));
     let paused = Arc::new(AtomicBool::new(false));
     let last_start_time = Arc::new(RwLock::new(Instant::now()));
-    let cumulative_time = Arc::new(RwLock::new(std::time::Duration::new(0, 0)));
+    let cumulative_time = Arc::new(RwLock::new(Duration::new(0, 0)));
     let ui_offset = Arc::new(AtomicUsize::new(0));
     let dns_shown = opts.show_dns;
 
